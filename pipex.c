@@ -6,12 +6,10 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 18:20:50 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/11/21 18:22:58 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/11/22 15:44:46 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <sys/time.h>
-#include <stdio.h>
+#include "pipex.h"
 
 //
