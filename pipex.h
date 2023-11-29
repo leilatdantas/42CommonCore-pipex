@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 18:23:13 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/11/22 18:47:46 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/11/28 17:32:53 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,28 @@
 # include <sys/wait.h>
 # include <stdio.h>
 # include <time.h>
+# include "libft/libft.h"
+# include <stdbool.h>
+
+typedef enum e_args
+{
+	PROGRAM,
+	INFILE,
+	CMD1,
+	CMD2,
+	OUTFILE
+
+} t_args;
+
+typedef struct	s_pipex
+{
+	int		fd_infile;
+	int		fd_outfile;
+	char	*path_cmd1;
+	char	*path_cmd2;
+	char	**args_cmd1;
+	char	**args_cmd2;
+	bool	invalid_file;
+}	t_pipex;
 
 #endif 
