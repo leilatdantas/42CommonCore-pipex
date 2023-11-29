@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/11/29 15:09:44 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/11/29 15:26:52 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,14 +119,15 @@ void ft_exec(t_pipex *pipex, char **envp)
         //child process
         dup2(fd[1], STDOUT_FILENO);
         dup2(pipex->fd_infile, STDIN_FILENO);
-        close(fd[0]);
+        // dup2(pipex->fd_outfile, STDOUT_FILENO);
+        // close(fd[0]);
         execve(pipex->path_cmd1, pipex->args_cmd1, envp);
     }
     else
     {
         //parent process
         wait(NULL);
-        dup2(fd[0], STDIN_FILENO);
+        // dup2(fd[0], STDIN_FILENO);
         dup2(pipex->fd_outfile, STDOUT_FILENO);
         execve(pipex->path_cmd2, pipex->args_cmd2, envp);
         close(pipex->fd_infile);
