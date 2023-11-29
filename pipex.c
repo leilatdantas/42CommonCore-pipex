@@ -6,10 +6,14 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 18:20:50 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/11/22 15:44:46 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/11/29 11:41:24 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-//
+int main (void)
+{
+	perror(getenv("SHELL"));
+	return (1);
+}
