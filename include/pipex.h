@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 18:23:13 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/11/29 09:10:03 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/11/30 10:00:45 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <sys/wait.h>
 # include <stdio.h>
 # include <time.h>
-# include "libft/libft.h"
+# include "../libft/libft.h"
 # include <stdbool.h>
 # include <fcntl.h>
 

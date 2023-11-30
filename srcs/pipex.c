@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pseudocode.c                                       :+:      :+:    :+:   */
+/*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/11/29 15:26:52 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/11/30 12:42:14 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ int	ft_error(char *error_message)
 	exit(EXIT_FAILURE);
 }
 
- // ./pipex infile "ls -l" "wc -l" outfile
-
-
-char    *get_path(char *command, char **envp, t_pipex *pipex)
+char    *get_path(char *command, char **envp)
 {
     int     i;
     char    **path;
@@ -59,10 +56,10 @@ void    check_args(t_pipex *pipex, char **argv, char **envp)
 {
     pipex->args_cmd1 = ft_split(argv[CMD1], ' ');
     pipex->args_cmd2 = ft_split(argv[CMD2], ' ');
-    pipex->path_cmd1 = get_path(pipex->args_cmd1[0], envp, pipex);
+    pipex->path_cmd1 = get_path(pipex->args_cmd1[0], envp);
     if (pipex->path_cmd1 == NULL)
         custom_error(pipex->args_cmd1[0], "command not found");
-    pipex->path_cmd2 = get_path(pipex->args_cmd2[0], envp, pipex);
+    pipex->path_cmd2 = get_path(pipex->args_cmd2[0], envp);
     if (pipex->path_cmd2 == NULL)
         custom_error(pipex->args_cmd2[0], "command not found");
     if((pipex->fd_infile = access(argv[INFILE], F_OK) == -1))
@@ -83,8 +80,6 @@ void    init_pipex(t_pipex *pipex)
     pipex->fd_infile = -1;
     pipex->fd_outfile = -1;
 }
-
-//  < fork.c grep a | wc -l > outfile.txt
 
 void     print_args_cmds(t_pipex pipex)
 {
@@ -117,94 +112,54 @@ void ft_exec(t_pipex *pipex, char **envp)
     if(process == 0)
     {
         //child process
-        dup2(fd[1], STDOUT_FILENO);
         dup2(pipex->fd_infile, STDIN_FILENO);
-        // dup2(pipex->fd_outfile, STDOUT_FILENO);
-        // close(fd[0]);
+        dup2(fd[1], STDOUT_FILENO);
+        close(fd[0]);
         execve(pipex->path_cmd1, pipex->args_cmd1, envp);
     }
     else
     {
         //parent process
         wait(NULL);
-        // dup2(fd[0], STDIN_FILENO);
+        dup2(fd[0], STDIN_FILENO);
         dup2(pipex->fd_outfile, STDOUT_FILENO);
+        close(fd[1]);
         execve(pipex->path_cmd2, pipex->args_cmd2, envp);
-        close(pipex->fd_infile);
-        close(pipex->fd_outfile);
     }
+}
+
+void    ft_cleanup(t_pipex *pipex)
+{
+    int i;
+    
+    if(pipex->path_cmd1)
+        free(pipex->path_cmd1);
+    if(pipex->path_cmd2)
+        free(pipex->path_cmd2);
+    i = 0;
+    while(pipex->args_cmd1)
+        free(pipex->args_cmd1[i++]);
+    // free(pipex->args_cmd1);
+    while(pipex->args_cmd2)
+        free(pipex->args_cmd2[i++]);
+    // free(pipex->args_cmd2);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
     t_pipex pipex;
-	// char	**cmd1;
-	// char	**cmd2;
+    int     process;
 
 	if (argc != 5)
 		ft_error("Usage: ./pipex file1 cmd1 cmd2 file2\n");
     init_pipex(&pipex);
     check_args(&pipex, argv, envp);
-    // execve(pipex.path_cmd1, pipex.args_cmd1, envp);
-    ft_exec(&pipex, envp);
-    // print_args_cmds(pipex);
+    print_args_cmds(pipex);
+    process = fork();
+    if (process == -1)
+        ft_error("fork error\n");
+    if (process == 0)
+        ft_exec(&pipex, envp);
+    wait(NULL);
+    // ft_cleanup(&pipex);
 }
-
-// função main(argc, argv):
-//     se argc != 5:
-//         imprimir "Uso: ./pipex file1 cmd1 cmd2 file2"
-//         retornar 1
-
-//     # Argumentos do programa
-//     file1 = argv[1]
-//     cmd1 = argv[2]
-//     cmd2 = argv[3]
-//     file2 = argv[4]
-
-//     # Pipes
-//     pipe_fd = criar_pipe()
-
-//     # Processo filho
-//     se fork() == 0:
-//         fechar(pipe_fd[0])  # Fechar a extremidade de leitura não utilizada
-
-//         # Redirecionar a saída padrão para o pipe
-//         dup2(pipe_fd[1], STDOUT_FILENO)
-//         fechar(pipe_fd[1])  # Fechar a extremidade de escrita do pipe
-
-//         # Executar cmd1
-//         executar_comando(cmd1)
-
-//     # Processo pai
-//     senão:
-//         fechar(pipe_fd[1])  # Fechar a extremidade de escrita não utilizada
-
-//         # Redirecionar a entrada padrão para o pipe
-//         dup2(pipe_fd[0], STDIN_FILENO)
-//         fechar(pipe_fd[0])  # Fechar a extremidade de leitura do pipe
-
-//         # Executar cmd2
-//         executar_comando(cmd2)
-
-//     # Esperar pela conclusão dos processos filhos
-//     esperar_processos()
-
-//     retornar 0
-
-// função criar_pipe():
-//     pipe_fd[2]
-//     se pipe(pipe_fd) < 0:
-//         perror("Erro ao criar pipe")
-//         sair(1)
-
-//     retornar pipe_fd
-
-// função executar_comando(comando):
-//     argumentos[] = {comando, NULL}
-//     execve(comando, argumentos, NULL)
-//     perror("Erro ao executar comando")
-//     sair(1)
-
-// função esperar_processos():
-//     enquanto esperar(NULL) > 0:
-//         continuar
