@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/11/30 12:42:14 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/11/30 15:50:53 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,57 +18,92 @@ int	ft_error(char *error_message)
 	exit(EXIT_FAILURE);
 }
 
+void    ft_free_array(char **array)
+{
+    int	i;
+
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	// free(array[i]);
+	free(array);
+}
+
+void    ft_cleanup(t_pipex *pipex)
+{
+    if (pipex->fd_infile >= 0)
+        close(pipex->fd_infile);
+    if (pipex->fd_outfile >= 0)
+        close(pipex->fd_outfile);
+    if(pipex->path_cmd1)
+        free(pipex->path_cmd1);
+    if(pipex->path_cmd2)
+        free(pipex->path_cmd2);
+    ft_free_array(pipex->args_cmd1);
+    ft_free_array(pipex->args_cmd2);
+}
+
 char    *get_path(char *command, char **envp)
 {
     int     i;
     char    **path;
+    char    *path_aux;
     char    *path_command;
 
     i = 0;
     while(ft_strnstr(envp[i], "PATH=", 5) == 0)
         i++;
-    path = ft_split(ft_strdup(envp[i] + 5), ':');
+    path_aux = ft_strdup(envp[i] + 5);
+    path = ft_split(path_aux, ":");
+    free(path_aux);
     i = 0;
     while (path[i++])
     {
-        path_command = ft_strjoin(ft_strjoin(path[i], "/"), command);
-        if (access(path_command, F_OK) == 0)
+        path_aux = ft_strjoin(path[i], "/");
+        path_command = ft_strjoin(path_aux, command);
+        free(path_aux);
+        if (access(path_command, F_OK | X_OK) == 0)
+        {
+            i = 0;
+            ft_free_array(path);
             return (path_command);
+        }
         free(path_command);
     }
-    i = 0;
-    while (path[i++])
-        free(path[i]);
-    free(path);
+    ft_free_array(path);
     return(NULL);
 }
 
-void    custom_error(char *file, char *message)
+void    custom_error(char *file, char *message, t_pipex *pipex)
 {
     ft_putstr_fd(message, 2);
     ft_putstr_fd(": ", 2);
     ft_putstr_fd(file, 2);
     ft_putstr_fd("\n", 2);
+    ft_cleanup(pipex);
     exit(EXIT_FAILURE);
 }
 
 void    check_args(t_pipex *pipex, char **argv, char **envp)
 {
-    pipex->args_cmd1 = ft_split(argv[CMD1], ' ');
-    pipex->args_cmd2 = ft_split(argv[CMD2], ' ');
+    pipex->args_cmd1 = ft_split(argv[CMD1], " ");
+    pipex->args_cmd2 = ft_split(argv[CMD2], " ");
     pipex->path_cmd1 = get_path(pipex->args_cmd1[0], envp);
     if (pipex->path_cmd1 == NULL)
-        custom_error(pipex->args_cmd1[0], "command not found");
+        custom_error(pipex->args_cmd1[0], "command not found", pipex);
     pipex->path_cmd2 = get_path(pipex->args_cmd2[0], envp);
     if (pipex->path_cmd2 == NULL)
-        custom_error(pipex->args_cmd2[0], "command not found");
+        custom_error(pipex->args_cmd2[0], "command not found", pipex);
     if((pipex->fd_infile = access(argv[INFILE], F_OK) == -1))
-        custom_error(argv[INFILE], "no such file or directory");
+        custom_error(argv[INFILE], "no such file or directory", pipex);
     else if ((pipex->fd_infile = open(argv[INFILE], O_RDONLY, 0444)) == -1)
-        custom_error(argv[INFILE], "permission denied");
+        custom_error(argv[INFILE], "permission denied", pipex);
     if ((pipex->fd_outfile = open(argv[OUTFILE],
         O_WRONLY | O_CREAT | O_TRUNC, 0666)) == -1)
-        custom_error(argv[OUTFILE], "error creating the file");
+        custom_error(argv[OUTFILE], "error creating the file", pipex);
 }
 
 void    init_pipex(t_pipex *pipex)
@@ -128,22 +163,6 @@ void ft_exec(t_pipex *pipex, char **envp)
     }
 }
 
-void    ft_cleanup(t_pipex *pipex)
-{
-    int i;
-    
-    if(pipex->path_cmd1)
-        free(pipex->path_cmd1);
-    if(pipex->path_cmd2)
-        free(pipex->path_cmd2);
-    i = 0;
-    while(pipex->args_cmd1)
-        free(pipex->args_cmd1[i++]);
-    // free(pipex->args_cmd1);
-    while(pipex->args_cmd2)
-        free(pipex->args_cmd2[i++]);
-    // free(pipex->args_cmd2);
-}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -154,12 +173,13 @@ int	main(int argc, char **argv, char **envp)
 		ft_error("Usage: ./pipex file1 cmd1 cmd2 file2\n");
     init_pipex(&pipex);
     check_args(&pipex, argv, envp);
-    print_args_cmds(pipex);
+    // print_args_cmds(pipex);
     process = fork();
     if (process == -1)
         ft_error("fork error\n");
     if (process == 0)
         ft_exec(&pipex, envp);
     wait(NULL);
-    // ft_cleanup(&pipex);
+    ft_cleanup(&pipex);
+    return (0);
 }

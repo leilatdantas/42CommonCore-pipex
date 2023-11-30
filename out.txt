@@ -1,1 +1,6 @@
-2
+NAME		= pipex
+NAME_BONUS		= pipex_bonus
+all: $(NAME)
+$(NAME): $(OBJ) $(TARGET)
+	$(CC) $(CFLAGS) $(TARGET) $(LFLAGS) -o $(NAME)
+	$(RM) $(OBJS) $(NAME)
