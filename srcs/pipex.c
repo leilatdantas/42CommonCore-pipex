@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/01 18:03:20 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/01 19:00:18 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,10 @@ void    check_args(t_pipex *pipex, char **argv, char **envp)
     if (pipex->path_cmd2 == NULL)
         custom_error2(pipex->args_cmd2[0], "command not found");
     if((pipex->fd_infile = access(argv[INFILE], F_OK) == -1))
-        custom_error2(argv[INFILE], "No such file or directory");
+    {
+        perror(argv[INFILE]);
+        // custom_error2(argv[INFILE], "No such file or directory");
+    }
     else if ((pipex->fd_infile = open(argv[INFILE], O_RDONLY, 0444)) == -1)
         custom_error(argv[INFILE], "permission denied", pipex, 1);
     if ((pipex->fd_outfile = open(argv[OUTFILE],
@@ -145,7 +148,7 @@ void     print_args_cmds(t_pipex pipex)
     printf("%s\n", pipex.path_cmd1);
     printf("%s\n", pipex.path_cmd2);
 }
-
+// input "grep Hello"  "wc -l"  output
 void ft_exec(t_pipex *pipex, char **envp)
 {
     int fd[2];
@@ -162,9 +165,7 @@ void ft_exec(t_pipex *pipex, char **envp)
         dup2(pipex->fd_infile, STDIN_FILENO);
         dup2(fd[1], STDOUT_FILENO);
         close(fd[0]);
-        if (execve(pipex->path_cmd1, pipex->args_cmd1, envp) == -1)
-            return ;
-        // execve(pipex->path_cmd1, pipex->args_cmd1, envp);
+        execve(pipex->path_cmd1, pipex->args_cmd1, envp);
     }
     else
     {
@@ -173,9 +174,7 @@ void ft_exec(t_pipex *pipex, char **envp)
         dup2(fd[0], STDIN_FILENO);
         dup2(pipex->fd_outfile, STDOUT_FILENO);
         close(fd[1]);
-        if (execve(pipex->path_cmd2, pipex->args_cmd2, envp) == -1)
-            return ;       
-        // execve(pipex->path_cmd2, pipex->args_cmd2, envp);
+        execve(pipex->path_cmd2, pipex->args_cmd2, envp);
     }
 }
 
