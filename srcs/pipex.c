@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/01 17:08:59 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/01 18:03:20 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,18 +90,27 @@ void    custom_error(char *file, char *message, t_pipex *pipex, int error)
     exit(error);
 }
 
+void    custom_error2(char *file, char *message)
+{
+    ft_putstr_fd(file, 2);
+    ft_putstr_fd(": ", 2);
+    ft_putstr_fd(message, 2);
+    ft_putstr_fd("\n", 2);
+    // ft_cleanup(pipex);
+}
+
 void    check_args(t_pipex *pipex, char **argv, char **envp)
 {
     pipex->args_cmd1 = ft_split(argv[CMD1], ' ');
     pipex->args_cmd2 = ft_split(argv[CMD2], ' ');
     pipex->path_cmd1 = get_path(pipex->args_cmd1[0], envp);
-    if (pipex->path_cmd1 == NULL)
-        custom_error(pipex->args_cmd1[0], "command not found", pipex, 5);
     pipex->path_cmd2 = get_path(pipex->args_cmd2[0], envp);
+    if (pipex->path_cmd1 == NULL)
+        custom_error2(pipex->args_cmd1[0], "command not found");
     if (pipex->path_cmd2 == NULL)
-        custom_error(pipex->args_cmd2[0], "command not found", pipex, 5);
+        custom_error2(pipex->args_cmd2[0], "command not found");
     if((pipex->fd_infile = access(argv[INFILE], F_OK) == -1))
-        custom_error(argv[INFILE], "No such file or directory", pipex, 0);
+        custom_error2(argv[INFILE], "No such file or directory");
     else if ((pipex->fd_infile = open(argv[INFILE], O_RDONLY, 0444)) == -1)
         custom_error(argv[INFILE], "permission denied", pipex, 1);
     if ((pipex->fd_outfile = open(argv[OUTFILE],
@@ -153,7 +162,9 @@ void ft_exec(t_pipex *pipex, char **envp)
         dup2(pipex->fd_infile, STDIN_FILENO);
         dup2(fd[1], STDOUT_FILENO);
         close(fd[0]);
-        execve(pipex->path_cmd1, pipex->args_cmd1, envp);
+        if (execve(pipex->path_cmd1, pipex->args_cmd1, envp) == -1)
+            return ;
+        // execve(pipex->path_cmd1, pipex->args_cmd1, envp);
     }
     else
     {
@@ -162,7 +173,9 @@ void ft_exec(t_pipex *pipex, char **envp)
         dup2(fd[0], STDIN_FILENO);
         dup2(pipex->fd_outfile, STDOUT_FILENO);
         close(fd[1]);
-        execve(pipex->path_cmd2, pipex->args_cmd2, envp);
+        if (execve(pipex->path_cmd2, pipex->args_cmd2, envp) == -1)
+            return ;       
+        // execve(pipex->path_cmd2, pipex->args_cmd2, envp);
     }
 }
 
