@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/11/30 15:50:53 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/01 13:15:22 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char    *get_path(char *command, char **envp)
     while(ft_strnstr(envp[i], "PATH=", 5) == 0)
         i++;
     path_aux = ft_strdup(envp[i] + 5);
-    path = ft_split(path_aux, ":");
+    path = ft_split(path_aux, ':');
     free(path_aux);
     i = 0;
     while (path[i++])
@@ -89,8 +89,8 @@ void    custom_error(char *file, char *message, t_pipex *pipex)
 
 void    check_args(t_pipex *pipex, char **argv, char **envp)
 {
-    pipex->args_cmd1 = ft_split(argv[CMD1], " ");
-    pipex->args_cmd2 = ft_split(argv[CMD2], " ");
+    pipex->args_cmd1 = ft_split(argv[CMD1], ' ');
+    pipex->args_cmd2 = ft_split(argv[CMD2], ' ');
     pipex->path_cmd1 = get_path(pipex->args_cmd1[0], envp);
     if (pipex->path_cmd1 == NULL)
         custom_error(pipex->args_cmd1[0], "command not found", pipex);
