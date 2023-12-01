@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/01 14:42:33 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/01 17:08:59 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ char    *get_path(char *command, char **envp)
     {
         path_aux = ft_strjoin(path[i], "/");
         path_command = ft_strjoin(path_aux, command);
+        if (!path_command)
+            return (NULL);
         free(path_aux);
         if (access(path_command, F_OK | X_OK) == 0)
         {
@@ -80,9 +82,9 @@ char    *get_path(char *command, char **envp)
 
 void    custom_error(char *file, char *message, t_pipex *pipex, int error)
 {
-    ft_putstr_fd(message, 2);
-    ft_putstr_fd(": ", 2);
     ft_putstr_fd(file, 2);
+    ft_putstr_fd(": ", 2);
+    ft_putstr_fd(message, 2);
     ft_putstr_fd("\n", 2);
     ft_cleanup(pipex);
     exit(error);
@@ -99,7 +101,7 @@ void    check_args(t_pipex *pipex, char **argv, char **envp)
     if (pipex->path_cmd2 == NULL)
         custom_error(pipex->args_cmd2[0], "command not found", pipex, 5);
     if((pipex->fd_infile = access(argv[INFILE], F_OK) == -1))
-        custom_error(argv[INFILE], "no such file or directory", pipex, 1);
+        custom_error(argv[INFILE], "No such file or directory", pipex, 0);
     else if ((pipex->fd_infile = open(argv[INFILE], O_RDONLY, 0444)) == -1)
         custom_error(argv[INFILE], "permission denied", pipex, 1);
     if ((pipex->fd_outfile = open(argv[OUTFILE],
@@ -173,6 +175,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 5)
 		ft_error("Usage: ./pipex file1 cmd1 cmd2 file2\n");
     init_pipex(&pipex);
+    pipex.name_program = argv[0];
     check_args(&pipex, argv, envp);
     // print_args_cmds(pipex);
     process = fork();
