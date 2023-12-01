@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/01 13:15:22 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/01 14:42:33 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ char    *get_path(char *command, char **envp)
     path_aux = ft_strdup(envp[i] + 5);
     path = ft_split(path_aux, ':');
     free(path_aux);
-    i = 0;
-    while (path[i++])
+    i = -1;
+    while (path[++i])
     {
         path_aux = ft_strjoin(path[i], "/");
         path_command = ft_strjoin(path_aux, command);
@@ -72,19 +72,20 @@ char    *get_path(char *command, char **envp)
             return (path_command);
         }
         free(path_command);
+        // i++;
     }
     ft_free_array(path);
     return(NULL);
 }
 
-void    custom_error(char *file, char *message, t_pipex *pipex)
+void    custom_error(char *file, char *message, t_pipex *pipex, int error)
 {
     ft_putstr_fd(message, 2);
     ft_putstr_fd(": ", 2);
     ft_putstr_fd(file, 2);
     ft_putstr_fd("\n", 2);
     ft_cleanup(pipex);
-    exit(EXIT_FAILURE);
+    exit(error);
 }
 
 void    check_args(t_pipex *pipex, char **argv, char **envp)
@@ -93,17 +94,17 @@ void    check_args(t_pipex *pipex, char **argv, char **envp)
     pipex->args_cmd2 = ft_split(argv[CMD2], ' ');
     pipex->path_cmd1 = get_path(pipex->args_cmd1[0], envp);
     if (pipex->path_cmd1 == NULL)
-        custom_error(pipex->args_cmd1[0], "command not found", pipex);
+        custom_error(pipex->args_cmd1[0], "command not found", pipex, 5);
     pipex->path_cmd2 = get_path(pipex->args_cmd2[0], envp);
     if (pipex->path_cmd2 == NULL)
-        custom_error(pipex->args_cmd2[0], "command not found", pipex);
+        custom_error(pipex->args_cmd2[0], "command not found", pipex, 5);
     if((pipex->fd_infile = access(argv[INFILE], F_OK) == -1))
-        custom_error(argv[INFILE], "no such file or directory", pipex);
+        custom_error(argv[INFILE], "no such file or directory", pipex, 1);
     else if ((pipex->fd_infile = open(argv[INFILE], O_RDONLY, 0444)) == -1)
-        custom_error(argv[INFILE], "permission denied", pipex);
+        custom_error(argv[INFILE], "permission denied", pipex, 1);
     if ((pipex->fd_outfile = open(argv[OUTFILE],
         O_WRONLY | O_CREAT | O_TRUNC, 0666)) == -1)
-        custom_error(argv[OUTFILE], "error creating the file", pipex);
+        custom_error(argv[OUTFILE], "error creating the file", pipex, 1);
 }
 
 void    init_pipex(t_pipex *pipex)
