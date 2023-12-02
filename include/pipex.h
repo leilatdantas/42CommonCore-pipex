@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 18:23:13 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/02 11:35:37 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/02 13:22:37 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ typedef struct	s_pipex
 	char	**args_cmd1;
 	char	**args_cmd2;
 	char	*name_program;
+	bool	absolute_path1;
+	bool	absolute_path2;
 	// bool	invalid_file;
 }	t_pipex;
 

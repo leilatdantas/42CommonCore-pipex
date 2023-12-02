@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/02 13:10:47 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/02 13:52:35 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,6 @@ char    *get_path(char *command, char **envp)
     path_command = NULL;
     if (!envp)
         path_command = find_path_aux(command);
-    if (command[0] == '/')
-        return(ft_strdup(command));
     else
     {
         while(ft_strnstr(envp[i], "PATH=", 5) == 0)
@@ -131,6 +129,10 @@ char    *get_path(char *command, char **envp)
             if (!path_command)
                 return (NULL);
             free(path_aux);
+            if (command[0] == '/')
+            {
+                path_command = ft_strdup(command);
+            }
             if (access(path_command, F_OK) == 0)
             {
                 i = 0;
@@ -243,7 +245,12 @@ void ft_exec(t_pipex *pipex, char **envp, char **argv)
         if (execve(pipex->path_cmd1, pipex->args_cmd1, envp) == -1)
         {
             if (pipex->path_cmd1 == NULL)
-                custom_error2(pipex->args_cmd1[0], "command not found");
+            {
+                if (pipex->args_cmd2[0][0] == '/')
+                    custom_error2(pipex->args_cmd1[0], "no such file or directory");
+                else
+                    custom_error2(pipex->args_cmd1[0], "command not found");   
+            }
             // else if (pipex->path_cmd1 && pipex->)
             //     perror(pipex->args_cmd1[0]);
         }
@@ -273,6 +280,8 @@ void ft_exec(t_pipex *pipex, char **envp, char **argv)
             // ft_putstr_fd(strerror(NO_COMAND), 2);
             if (pipex->path_cmd2 == NULL)
             {
+                if (pipex->args_cmd2[0][0] == '/')
+                     custom_error(pipex->args_cmd2[0], "no such file or directory", pipex, 127);
                 custom_error(pipex->args_cmd2[0], "command not found", pipex, 127);
             }
             // else
