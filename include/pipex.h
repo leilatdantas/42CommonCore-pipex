@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 18:23:13 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/01 22:09:38 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/02 11:35:37 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include "../libft/libft.h"
 # include <stdbool.h>
 # include <fcntl.h>
+# include <string.h>
 
 typedef enum e_args
 {
@@ -32,6 +33,13 @@ typedef enum e_args
 	OUTFILE
 
 } t_args;
+
+typedef	enum e_errors
+{
+	NO_COMAND	= 0,
+	NO_FILE	= 2,
+	BAD_FD = 9
+} t_errors;
 
 typedef struct	s_pipex
 {
