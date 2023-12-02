@@ -6,7 +6,7 @@
 #    By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/30 09:21:39 by lebarbos          #+#    #+#              #
-#    Updated: 2023/12/01 13:15:56 by lebarbos         ###   ########.fr        #
+#    Updated: 2023/12/01 22:10:18 by lebarbos         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ OBJ_BONUS	= objs_bonus
 
 #FILES
 NAME		= pipex
-SRC_FILES	= pipex.c
+SRC_FILES	= pipex.c pipex_utils.c
 OBJ_FILES	= $(SRC_FILES:%.c=%.o)
 TARGET		= $(addprefix $(OBJ)/, $(OBJ_FILES))
 #BONUS FILES
@@ -66,6 +66,6 @@ clean:
 	make clean -C $(LIBFT_PATH)
 	
 
-fclean:
+fclean: clean
 	$(RM) $(OBJS) $(NAME)
 	make fclean -C $(LIBFT_PATH)
