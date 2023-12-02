@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/02 18:20:21 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/02 20:31:59 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void    ft_cleanup(t_pipex *pipex)
         free(pipex->path_cmd2);
     ft_free_array(pipex->args_cmd1);
     ft_free_array(pipex->args_cmd2);
+    unlink(URANDOM_PATH);
 }
 
 char    *find_path_aux(char *command)
