@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 18:23:13 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/02 13:22:37 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/02 18:04:10 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <stdbool.h>
 # include <fcntl.h>
 # include <string.h>
+
+# define URANDOM_PATH ".pipex_urandom"
 
 typedef enum e_args
 {
@@ -49,9 +51,7 @@ typedef struct	s_pipex
 	char	*path_cmd2;
 	char	**args_cmd1;
 	char	**args_cmd2;
-	char	*name_program;
-	bool	absolute_path1;
-	bool	absolute_path2;
+	int	error;
 	// bool	invalid_file;
 }	t_pipex;
 
