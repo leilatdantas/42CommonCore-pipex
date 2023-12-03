@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:43:04 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/03 20:00:32 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/03 20:15:45 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,6 @@ void	copy_non_space_strings(char **dest, char **src)
 
 void	remove_spaces(char **array)
 {
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	j = 0;
 	if (array == NULL)
 		return ;
 	copy_non_space_strings(array, array);
