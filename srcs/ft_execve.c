@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/03 20:40:45 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/03 20:50:37 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,11 @@ void	setup_input(t_pipex *pipex, char **argv)
 	{
 		handle_urandom();
 		pipex->fd_infile = open(URANDOM_PATH, O_RDONLY);
-		return ;
 	}
 	else
 	{
 		pipex->fd_infile = access(argv[INFILE], F_OK);
-		if (pipex->fd_infile == -1)
-			return ;
-		else
+		if (pipex->fd_infile != -1)
 			pipex->fd_infile = open(argv[INFILE], O_RDONLY, 0444);
 	}
 }
@@ -54,8 +51,6 @@ void	ft_exec(t_pipex *pipex, char **envp, char **argv)
 		// 		perror(argv[INFILE]);
 		// 	else
 		// 		pipex->fd_infile = open(argv[INFILE], O_RDONLY, 0444);
-		// 	if (pipex->fd_infile == -1)
-		// 		perror(argv[INFILE]);
 		if (pipex->fd_infile == -1)
 			perror(argv[INFILE]);
 		else
