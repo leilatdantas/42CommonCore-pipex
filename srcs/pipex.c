@@ -194,7 +194,6 @@ void ft_exec(t_pipex *pipex, char **envp, char **argv)
         ft_error("fork error\n");
     if(process == 0)
     {
-        //child process
         if (ft_strncmp(argv[INFILE], "/dev/urandom", 12) == 0)
         {
             handle_urandom();
