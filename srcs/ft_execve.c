@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/03 20:50:37 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/03 20:53:27 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	ft_exec(t_pipex *pipex, char **envp, char **argv)
 		// 		perror(argv[INFILE]);
 		// 	else
 		// 		pipex->fd_infile = open(argv[INFILE], O_RDONLY, 0444);
+		setup_input(pipex, argv);
 		if (pipex->fd_infile == -1)
 			perror(argv[INFILE]);
 		else
