@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/03 12:13:42 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/03 15:41:42 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,3 +271,5 @@ int	main(int argc, char **argv, char **envp)
     ft_cleanup(&pipex);
     return (0);
 }
+
+//./pipex infile.txt 'sed    "s/And/But/"' 'grep But' outfile.txt
