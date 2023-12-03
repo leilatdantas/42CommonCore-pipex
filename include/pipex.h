@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 18:23:13 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/02 18:04:10 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/03 19:30:01 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,7 @@ typedef struct	s_pipex
 }	t_pipex;
 
 char **ft_split_mod(const char *s);
+char	*get_path(char *command, char **envp);
+void	ft_free_array(char **path);
 
 #endif 
