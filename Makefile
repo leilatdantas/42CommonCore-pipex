@@ -6,7 +6,7 @@
 #    By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/30 09:21:39 by lebarbos          #+#    #+#              #
-#    Updated: 2023/12/03 19:44:19 by lebarbos         ###   ########.fr        #
+#    Updated: 2023/12/03 20:41:08 by lebarbos         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ OBJ_BONUS	= objs_bonus
 
 #FILES
 NAME		= pipex
-SRC_FILES	= pipex.c pipex_utils.c get_path.c error_handling.c parsing.c
+SRC_FILES	= pipex.c pipex_utils.c get_path.c error_handling.c parsing.c ft_execve.c
 OBJ_FILES	= $(SRC_FILES:%.c=%.o)
 TARGET		= $(addprefix $(OBJ)/, $(OBJ_FILES))
 #BONUS FILES
