@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/02 21:51:20 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/03 12:13:42 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,14 @@ char    *get_path(char *command, char **envp)
         if (!path_command)
             return (NULL);
         free(path_aux);
-        if (command[0] == '/')
+        if (command[0] == '/' || (command[0] == '.' &&
+            ft_strnstr(command, ".sh", ft_strlen(command))))
         {
-            path_command = ft_strdup(command);
+                path_command = ft_strdup(command);
         }
-        if (access(path_command, F_OK) == 0)
+        // else if (command[0] == '.')
+        //     path_command = ft_strdup(&command[2]);
+        if (access(path_command, F_OK | X_OK) == 0)
         {
             i = 0;
             ft_free_array(path);
@@ -206,28 +209,33 @@ void ft_exec(t_pipex *pipex, char **envp, char **argv)
             else if ((pipex->fd_infile = open(argv[INFILE], O_RDONLY, 0444))
                     == -1)
                 perror(argv[INFILE]);
-        }
-        dup2(pipex->fd_infile, STDIN_FILENO);
-        dup2(fd[1], STDOUT_FILENO);
-        close(fd[0]);
-        close(fd[1]);
-        unlink(URANDOM_PATH);
-        if (execve(pipex->path_cmd1, pipex->args_cmd1, envp) == -1)
-        {
-            if (pipex->path_cmd1 == NULL)
+            else
             {
-                if (pipex->args_cmd2[0][0] == '/')
-                    custom_error2(pipex->args_cmd1[0], "no such file or directory");
-                else
-                    custom_error2(pipex->args_cmd1[0], "command not found");   
+                dup2(pipex->fd_infile, STDIN_FILENO);
+                dup2(fd[1], STDOUT_FILENO);
+                close(fd[0]);
+                close(fd[1]);
+                unlink(URANDOM_PATH);
+                if (execve(pipex->path_cmd1, pipex->args_cmd1, envp) == -1)
+                {
+                    if (pipex->path_cmd1 == NULL)
+                    {
+                        if (pipex->args_cmd2[0][0] == '/')
+                            custom_error2(pipex->args_cmd1[0], "no such file or directory");
+                        else
+                            custom_error2(pipex->args_cmd1[0], "command not found");   
+                    }
+                    else
+                        perror(pipex->args_cmd1[0]);
+                }
             }
         }
     }
     else
     {
     //parent process
-    waitpid(process, NULL, WNOHANG);
-    // wait(NULL);
+    // waitpid(process, NULL, WNOHANG);
+    wait(NULL);
     if ((pipex->fd_outfile = open(argv[OUTFILE],
             O_WRONLY | O_CREAT | O_TRUNC, 0666)) == -1)
     perror(argv[OUTFILE]);
