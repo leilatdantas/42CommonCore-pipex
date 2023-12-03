@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/03 15:41:42 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/03 15:43:46 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,12 +261,12 @@ int	main(int argc, char **argv, char **envp)
 		ft_error("Usage: ./pipex file1 cmd1 cmd2 file2\n");
     init_pipex(&pipex);
     check_args(&pipex, argv, envp);
-    // print_args_cmds(pipex);
+    print_args_cmds(pipex);
     // process = fork();
     // if (process == -1)
     //     ft_error("fork error\n");
     // if (process == 0)
-    ft_exec(&pipex, envp, argv);
+    // ft_exec(&pipex, envp, argv);
     // wait(NULL);
     ft_cleanup(&pipex);
     return (0);
