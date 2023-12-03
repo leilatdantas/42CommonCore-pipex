@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/03 18:25:40 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/03 19:06:42 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,42 @@ void    custom_error2(char *file, char *message)
     ft_putstr_fd("\n", 2);
 }
 
+void remove_spaces(char **array) {
+    if (array == NULL) {
+        return;
+    }
+
+    size_t i = 0;
+    size_t j = 0;
+
+    while (array[i] != NULL) {
+        // Verifica se a string contém apenas espaços
+        int is_only_spaces = 1;
+        for (size_t k = 0; k < strlen(array[i]); ++k) {
+            if (array[i][k] != ' ' && array[i][k] != '\t' && array[i][k] != '\n') {
+                is_only_spaces = 0;
+                break;
+            }
+        }
+
+        if (!is_only_spaces) {
+            // Se a string não for apenas espaços, mantenha-a no array
+            array[j++] = array[i];
+        }
+        else
+            free(array[i]);
+        ++i;
+    }
+    // Adiciona NULL no final do array
+    array[j] = NULL;
+}
+
 void    check_args(t_pipex *pipex, char **argv, char **envp)
 {
     pipex->args_cmd1 = ft_split_mod(argv[CMD1]);
+    remove_spaces(pipex->args_cmd1);
     pipex->args_cmd2 = ft_split_mod(argv[CMD2]);
+    remove_spaces(pipex->args_cmd2);
     pipex->path_cmd1 = get_path(pipex->args_cmd1[0], envp);
     pipex->path_cmd2 = get_path(pipex->args_cmd2[0], envp);
 }
@@ -258,7 +290,7 @@ int	main(int argc, char **argv, char **envp)
     t_pipex pipex;
     // int     process;
 
-	if (argc != 5)
+	if (argc < 5)
 		ft_error("Usage: ./pipex file1 cmd1 cmd2 file2\n");
     init_pipex(&pipex);
     check_args(&pipex, argv, envp);
