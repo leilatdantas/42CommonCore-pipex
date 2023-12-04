@@ -1,3 +1,2 @@
-   1 
-   1 teste
-   1 teste tes te
+CFLAGS 	= -Werror -Wextra -Wall -g #-fsanitize=address
+all: $(NAME)

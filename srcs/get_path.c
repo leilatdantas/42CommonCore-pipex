@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:25:10 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/04 11:57:17 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/04 16:16:25 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,14 @@ char	*ft_check_command_location(char *command, char *path_i)
 	path_aux = ft_strjoin(path_i, "/");
 	path_command = ft_strjoin(path_aux, command);
 	free(path_aux);
-	if (command[0] == '/' || command[0] == '.')
+	if (command[0] == '/' || (command[0] == '.' && command[1] == '/'))
 	{
 		if (ft_strnstr(command, ".sh", strlen(command)))
 			path_command = command;
 		path_command = ft_strdup(command);
 	}
+	else if (ft_strnstr(command, ".sh", ft_strlen(command)) && ft_strchr(command, '/'))
+		path_command = command;
 	if (access(path_command, F_OK) == 0)
 		return (path_command);
 	free(path_command);
