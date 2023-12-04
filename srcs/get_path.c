@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:25:10 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/03 19:56:30 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/04 11:57:17 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ char	*ft_get_path_aux(char **envp)
 
 	i = 0;
 	if (!envp[0])
-		path_aux = strdup("/usr/bin:/bin:/usr/sbin:/sbin");
+		path_aux = ft_strdup("/usr/bin:/bin:/usr/sbin:/sbin");
 	else
 	{
-		while (strncmp(envp[i], "PATH=", 5) != 0)
+		while (ft_strncmp(envp[i], "PATH=", 5) != 0)
 			i++;
-		path_aux = strdup(envp[i] + 5);
+		path_aux = ft_strdup(envp[i] + 5);
 	}
 	return (path_aux);
 }
@@ -58,9 +58,9 @@ char	*ft_check_command_location(char *command, char *path_i)
 	{
 		if (ft_strnstr(command, ".sh", strlen(command)))
 			path_command = command;
-		path_command = strdup(command);
+		path_command = ft_strdup(command);
 	}
-	if (access(path_command, F_OK | X_OK) == 0)
+	if (access(path_command, F_OK) == 0)
 		return (path_command);
 	free(path_command);
 	return (NULL);

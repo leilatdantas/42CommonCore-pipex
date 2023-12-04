@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 22:07:27 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/03 20:09:50 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/04 10:29:33 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ int	ft_countword(const char *input)
 	word_count = 0;
 	inside_quotes = 0;
 	ch = input;
-	while (*ch != '\0') 
+	while (*ch != '\0')
 	{
-		if (*ch == '"' || *ch == '\'') 
+		if (*ch == '"' || *ch == '\'')
 			inside_quotes = !inside_quotes;
-		else if (*ch == ' ' && !inside_quotes) 
+		else if (*ch == ' ' && !inside_quotes)
 			word_count++;
 		ch++;
 	}
@@ -43,7 +43,7 @@ static char	*ft_strndup(const char *s, size_t len)
 	dup = malloc(sizeof(char) * (len + 1));
 	if (dup == NULL)
 		return (NULL);
-	while (i < len) 
+	while (i < len)
 	{
 		dup[i] = s[i];
 		i++;
@@ -67,13 +67,13 @@ char	**ft_split_mod(const char *s)
 	array = malloc((words + 1) * sizeof(char *));
 	if (!s || !array)
 		return (NULL);
-	while (index < words) 
+	while (index < words)
 	{
 		while (*s == ' ' || *s == '\t' || *s == '\n')
 			s++;
 		wordlen = 0;
-		while (s[wordlen] != '\0' && s[wordlen] != ' ' 
-			&& s[wordlen] != '\t' && s[wordlen] != '\n') 
+		while (s[wordlen] != '\0' && s[wordlen] != ' '
+			&& s[wordlen] != '\t' && s[wordlen] != '\n')
 		{
 			if (s[wordlen] == '"' || s[wordlen] == '\'')
 			{
@@ -90,12 +90,12 @@ char	**ft_split_mod(const char *s)
 	}
 	array[index] = NULL;
 	i = 0;
-	while (i < words) 
+	while (i < words)
 	{
 		len = ft_strlen(array[i]);
 		if (len >= 2 && (array[i][0] == '"' || array[i][0] == '\''
 			|| array[i][0] == ' ') && ((array[i][len - 1] == array[i][0])
-			|| array[i][0] == '\0')) 
+			|| array[i][0] == '\0'))
 		{
 			ft_memmove(array[i], array[i] + 1, len - 2);
 			array[i][len - 2] = '\0';
