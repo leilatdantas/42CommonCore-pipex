@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 22:07:27 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/04 10:29:33 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/05 09:51:34 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	ft_countword(const char *input)
 	ch = input;
 	while (*ch != '\0')
 	{
+		if (*ch == '\\' && *(ch + 1) != '\0')
+			ch+=2;
 		if (*ch == '"' || *ch == '\'')
 			inside_quotes = !inside_quotes;
 		else if (*ch == ' ' && !inside_quotes)
@@ -52,6 +54,8 @@ static char	*ft_strndup(const char *s, size_t len)
 	return (dup);
 }
 
+char **remove_
+
 char	**ft_split_mod(const char *s)
 {
 	size_t	index;
@@ -75,11 +79,17 @@ char	**ft_split_mod(const char *s)
 		while (s[wordlen] != '\0' && s[wordlen] != ' '
 			&& s[wordlen] != '\t' && s[wordlen] != '\n')
 		{
-			if (s[wordlen] == '"' || s[wordlen] == '\'')
+			// if (s[wordlen] == '\\' && s[wordlen + 1] != '\0')
+			// 	wordlen+=2;
+			if (s[wordlen] == '\"' || s[wordlen] == '\'')
 			{
 				k = 1;
 				while (s[wordlen + k] != '\0' && s[wordlen + k] != s[wordlen])
+				{
+					if (s[wordlen + k] == '\\' && s[wordlen + k + 1] != '\0')
+						k++;
 					k++;
+				}
 				wordlen += k + 1;
 			}
 			else
@@ -93,7 +103,7 @@ char	**ft_split_mod(const char *s)
 	while (i < words)
 	{
 		len = ft_strlen(array[i]);
-		if (len >= 2 && (array[i][0] == '"' || array[i][0] == '\''
+		if (len >= 2 && (array[i][0] == '\"' || array[i][0] == '\''
 			|| array[i][0] == ' ') && ((array[i][len - 1] == array[i][0])
 			|| array[i][0] == '\0'))
 		{
@@ -102,5 +112,6 @@ char	**ft_split_mod(const char *s)
 		}
 		i++;
 	}
+	remove_scape_symbol(array);
 	return (array);
 }
