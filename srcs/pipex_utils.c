@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 22:07:27 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/05 09:54:38 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/05 12:12:05 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,58 @@ static char	*ft_strndup(const char *s, size_t len)
 	return (dup);
 }
 
-char **remove_
+int	array_size(char **array)
+{
+	int i;
+
+	i = 0;
+	while (array[i])
+		i++;
+	return(i);
+}
+
+char **remove_scape_symbol(char **s)
+{
+	int	i;
+	size_t	len;
+	size_t	j;
+	size_t	k;
+	// int		scape_symbol;
+	char	**new_array;
+	
+	remove_spaces(s);
+	new_array = malloc(sizeof(char *) * (array_size(s) + 1));
+	i = 0;
+	while (i < array_size(s))
+	{
+		k = 0;
+		j = 0;
+		while (s[i][j])
+		{
+			if (s[i][j + k] == '\\' && s[i][j + k + 1] != '\0')
+			{
+				k++;
+			}
+			j++;
+		}
+		new_array[i] = malloc(sizeof(char) * (ft_strlen(s[i]) - k + 1));
+		j = 0;
+		len = 0;
+		while (s[i][j])
+		{
+			if (s[i][j] == '\\' && s[i][j + 1] != '\0')
+				j++;
+			new_array[i][len] = s[i][j];
+			len++;
+			j++;
+		}
+		new_array[i][len] = '\0';
+		i++;
+	}
+	new_array[i] = NULL;
+	// ft_free_array(s);
+	return (new_array);
+}
 
 char	**ft_split_mod(const char *s)
 {
@@ -64,6 +115,7 @@ char	**ft_split_mod(const char *s)
 	size_t	k;
 	size_t	i;
 	char	**array;
+	char	**new_array;
 	size_t	len;
 
 	index = 0;
@@ -112,6 +164,7 @@ char	**ft_split_mod(const char *s)
 		}
 		i++;
 	}
-	remove_scape_symbol(array);
-	return (array);
+	new_array = remove_scape_symbol(array);
+	ft_free_array(array);
+	return (new_array);
 }

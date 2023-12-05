@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/04 20:00:13 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/05 10:23:14 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ void	ft_free_array(char **array)
 void	check_args(t_pipex *pipex, char **argv, char **envp)
 {
 	pipex->args_cmd1 = ft_split_mod(argv[CMD1]);
-	remove_spaces(pipex->args_cmd1);
+	// remove_spaces(pipex->args_cmd1);
 	pipex->args_cmd2 = ft_split_mod(argv[CMD2]);
-	remove_spaces(pipex->args_cmd2);
+	// remove_spaces(pipex->args_cmd2);
 	pipex->path_cmd1 = get_path(pipex->args_cmd1[0], envp);
 	pipex->path_cmd2 = get_path(pipex->args_cmd2[0], envp);
 }

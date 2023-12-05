@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:25:10 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/04 16:16:25 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/05 10:14:54 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,10 @@ char	*get_path(char *command, char **envp)
 	{
 		path_command = ft_check_command_location(command, path[i]);
 		if (path_command != NULL)
+		{
+			ft_free_array(path);			
 			return (path_command);
+		}
 		i++;
 	}
 	ft_free_memory(path, path_command);
