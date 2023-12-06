@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/05 12:02:39 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/06 10:07:13 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	ft_exec(t_pipex *pipex, char **envp, char **argv)
 	}
 	else
 	{
+		waitpid(process, NULL, WNOHANG);
 		parent_process(fd, pipex, envp, argv);
-		wait(NULL);
 	}
 }
