@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:25:10 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/07 11:34:42 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/07 18:30:16 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char	*get_path(char *command, char **envp)
 	char	*path_command;
 
 	i = 0;
-	if (access(command, F_OK) == 0)
+	if (access(command, F_OK) == 0 && (command[0] == '.' || command[0] == '/'))
 		return (command);
 	else if (!envp)
 		path_aux = ft_strdup("/usr/bin:/bin:/usr/sbin:/sbin");

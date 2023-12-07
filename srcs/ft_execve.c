@@ -6,12 +6,12 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/06 10:07:13 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/07 18:26:30 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-// #include <errno.h>
+#include <errno.h>
 
 void	setup_input(t_pipex *pipex, char **argv)
 {
@@ -58,7 +58,7 @@ void	parent_process(int *fd, t_pipex *pipex, char **envp, char **argv)
 	if (pipex->fd_outfile == -1)
 	{
 		perror(argv[OUTFILE]);
-		exit(1);
+		exit(errno);
 	}
 	else
 	{
