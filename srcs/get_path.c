@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:25:10 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/05 10:14:54 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/07 11:27:55 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,11 @@ char	*ft_get_path_aux(char **envp)
 	char	*path_aux;
 
 	i = 0;
-	if (!envp[0])
-		path_aux = ft_strdup("/usr/bin:/bin:/usr/sbin:/sbin");
-	else
-	{
-		while (ft_strncmp(envp[i], "PATH=", 5) != 0)
-			i++;
+	path_aux = NULL;
+	while (envp[i] && (ft_strncmp(envp[i], "PATH=", 5) != 0))
+		i++;
+	if (envp[i])
 		path_aux = ft_strdup(envp[i] + 5);
-	}
 	return (path_aux);
 }
 
@@ -76,19 +73,29 @@ char	*get_path(char *command, char **envp)
 	char	*path_command;
 
 	i = 0;
-	path_aux = ft_get_path_aux(envp);
-	path = ft_split_path(path_aux);
-	free(path_aux);
-	while (path[i])
+	if (access(command, F_OK))
+		return (command);
+	else if (!envp)
+		path_aux = ft_strdup("/usr/bin:/bin:/usr/sbin:/sbin");
+	else
+		path_aux = ft_get_path_aux(envp);
+	if (!path_aux)
+		return (NULL);
+	else
 	{
-		path_command = ft_check_command_location(command, path[i]);
-		if (path_command != NULL)
+		path = ft_split_path(path_aux);
+		free(path_aux);
+		while (path[i])
 		{
-			ft_free_array(path);			
-			return (path_command);
+			path_command = ft_check_command_location(command, path[i]);
+			if (path_command != NULL)
+			{
+				ft_free_array(path);			
+				return (path_command);
+			}
+			i++;
 		}
-		i++;
+		ft_free_memory(path, path_command);
 	}
-	ft_free_memory(path, path_command);
 	return (NULL);
 }
