@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:25:10 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/07 18:30:16 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/08 11:16:54 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,15 @@ char	*ft_get_path_aux(char **envp)
 
 	i = 0;
 	path_aux = NULL;
-	while (envp[i] && (ft_strncmp(envp[i], "PATH=", 5) != 0))
-		i++;
-	if (envp[i])
-		path_aux = ft_strdup(envp[i] + 5);
+	if (!envp)
+		path_aux = ft_strdup("/usr/bin:/bin:/usr/sbin:/sbin");
+	else
+	{
+		while (envp[i] && (ft_strncmp(envp[i], "PATH=", 5) != 0))
+			i++;
+		if (envp[i] && envp[i][5] != '\0')
+			path_aux = ft_strdup(envp[i] + 5);
+	}
 	return (path_aux);
 }
 
@@ -75,8 +80,8 @@ char	*get_path(char *command, char **envp)
 	i = 0;
 	if (access(command, F_OK) == 0 && (command[0] == '.' || command[0] == '/'))
 		return (command);
-	else if (!envp)
-		path_aux = ft_strdup("/usr/bin:/bin:/usr/sbin:/sbin");
+	// else if (!envp)
+	// 	path_aux = ft_strdup("/usr/bin:/bin:/usr/sbin:/sbin");
 	else
 		path_aux = ft_get_path_aux(envp);
 	if (!path_aux)
