@@ -6,7 +6,7 @@
 #    By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/30 09:21:39 by lebarbos          #+#    #+#              #
-#    Updated: 2023/12/04 16:04:32 by lebarbos         ###   ########.fr        #
+#    Updated: 2023/12/08 18:47:23 by lebarbos         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ LFLAGS	= -L ./libft -lft
 
 #PATH
 INC			= include
+HEADERS		= include/pipex.h libft/libft.h
 SRCS		= srcs
 SRCS_BONUS	= bonus
 LIBFT_PATH	= libft
@@ -51,23 +52,31 @@ BONUS_TARGET	= $(addprefix $(OBJ_BONUS)/, $(BONUS_OBJS))
 #RULES
 all: $(NAME)
 
-$(NAME): $(OBJ) $(TARGET)
+$(NAME): $(OBJ) $(TARGET) $(HEADERS)
+	@ echo "Make $(MAGENTA)libft$(RESET):"
 	make -C $(LIBFT_PATH)
+	@ echo "Compiling $(GREEN)$(NAME)$(RESET):"
 	$(CC) $(CFLAGS) $(TARGET) $(LFLAGS) -o $(NAME)
 
 $(OBJ)/%.o : $(SRCS)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I $(INC)
+	@ $(CC) $(CFLAGS) -c $< -o $@ -I $(INC)
 
 $(OBJ):
-	mkdir -p $(OBJ)
+	@ mkdir -p $(OBJ)
 
 clean:
+	@ echo "Removing $(RED)objs$(RESET)..."
 	$(RM) $(OBJ)
-	make clean -C $(LIBFT_PATH)
+	@ make clean -C $(LIBFT_PATH)
 	
 
 fclean: clean
 	$(RM) $(OBJS) $(NAME)
-	make fclean -C $(LIBFT_PATH)
+	@ echo "...and $(RED)$(NAME)$(RESET)"
+	@ make fclean -C $(LIBFT_PATH)
 
 re: fclean all
+
+.PHONY: all clean fclean
+
+# .SILENT:

@@ -1,4 +1,4 @@
 #!/bin/bash 
 
-cat ok
+cat input.txt
 
