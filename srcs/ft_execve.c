@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/09 19:46:45 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/09 20:11:08 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	child_process(int *fd, t_pipex *pipex, char **envp)
 	if (pipex->path_cmd1 == NULL)
 	{
 		ft_cleanup(pipex);
+		ft_putstr_fd("command not found\n", 2);
 		exit(127);
 	}
 	else if(execve(pipex->path_cmd1, pipex->args_cmd1, envp) == -1)
@@ -74,6 +75,7 @@ void	parent_process(int *fd, t_pipex *pipex, char **envp, char **argv)
 		if (!pipex->path_cmd2)
 		{
 			ft_cleanup(pipex);
+			ft_putstr_fd("command not found", 2);
 			exit(127);
 		}
 		else if (execve(pipex->path_cmd2, pipex->args_cmd2, envp) == -1)

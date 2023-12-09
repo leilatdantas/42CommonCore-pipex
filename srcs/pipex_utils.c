@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 22:07:27 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/09 19:05:48 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/09 19:55:43 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,11 +125,11 @@ char	**ft_split_mod(const char *s)
 		return (NULL);
 	while (index < words)
 	{
-		while (*s == ' ' || *s == '\t' || *s == '\n')
+		while (*s == ' ' || *s == '\n')
 			s++;
 		wordlen = 0;
 		while (s[wordlen] != '\0' && s[wordlen] != ' '
-			&& s[wordlen] != '\t' && s[wordlen] != '\n')
+			 && s[wordlen] != '\n')
 		{
 			if (s[wordlen] == '\"' || s[wordlen] == '\'')
 			{
