@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:25:10 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/08 13:25:53 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/09 18:40:56 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*ft_get_path_aux(char **envp)
 	i = 0;
 	path_aux = NULL;
 	if (!envp[0])
-		path_aux = ft_strdup("/usr/bin:/bin:/usr/sbin:/sbin");
+		path_aux = ft_strdup("/usr/bin:/bin");
 	else
 	{
 		while (envp[i] && (ft_strncmp(envp[i], "PATH=", 5) != 0))
@@ -62,7 +62,8 @@ char	*ft_check_command_location(char *command, char *path_i)
 			path_command = command;
 		path_command = ft_strdup(command);
 	}
-	else if (ft_strnstr(command, ".sh", ft_strlen(command)) && ft_strchr(command, '/'))
+	else if (ft_strnstr(command, ".sh", ft_strlen(command))
+		&& ft_strchr(command, '/'))
 		path_command = command;
 	if (access(path_command, F_OK) == 0)
 		return (path_command);
@@ -78,10 +79,10 @@ char	*get_path(char *command, char **envp)
 	char	*path_command;
 
 	i = 0;
+	if (!command)
+		return (NULL);
 	if (access(command, F_OK) == 0 && (command[0] == '.' || command[0] == '/'))
 		return (command);
-	// else if (!envp)
-	// 	path_aux = ft_strdup("/usr/bin:/bin:/usr/sbin:/sbin");
 	else
 		path_aux = ft_get_path_aux(envp);
 	if (!path_aux)
@@ -95,7 +96,7 @@ char	*get_path(char *command, char **envp)
 			path_command = ft_check_command_location(command, path[i]);
 			if (path_command != NULL)
 			{
-				ft_free_array(path);			
+				ft_free_array(path);
 				return (path_command);
 			}
 			i++;

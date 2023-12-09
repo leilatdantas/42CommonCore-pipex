@@ -6,7 +6,7 @@
 #    By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/30 09:21:39 by lebarbos          #+#    #+#              #
-#    Updated: 2023/12/08 18:47:23 by lebarbos         ###   ########.fr        #
+#    Updated: 2023/12/09 18:38:30 by lebarbos         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,28 +26,21 @@ CC	= cc
 RM	= rm -rf
 
 #FLAGS
-CFLAGS 	= -Werror -Wextra -Wall -g -fsanitize=address
+CFLAGS 	= -Werror -Wextra -Wall -g #-fsanitize=address
 LFLAGS	= -L ./libft -lft
 
 #PATH
 INC			= include
 HEADERS		= include/pipex.h libft/libft.h
 SRCS		= srcs
-SRCS_BONUS	= bonus
 LIBFT_PATH	= libft
 OBJ			= objs
-OBJ_BONUS	= objs_bonus
 
 #FILES
 NAME		= pipex
-SRC_FILES	= pipex.c pipex_utils.c get_path.c error_handling.c parsing.c ft_execve.c
+SRC_FILES	= pipex.c pipex_utils.c get_path.c error_handling.c parsing.c ft_execve.c handle_urandom.c
 OBJ_FILES	= $(SRC_FILES:%.c=%.o)
 TARGET		= $(addprefix $(OBJ)/, $(OBJ_FILES))
-#BONUS FILES
-NAME_BONUS		= pipex_bonus
-BONUS_FILES		= pipex_bonus.c
-BONUS_OBJS		= $(BONUS_FILES:%.c=%.o)
-BONUS_TARGET	= $(addprefix $(OBJ_BONUS)/, $(BONUS_OBJS))
 
 #RULES
 all: $(NAME)
@@ -72,8 +65,8 @@ clean:
 
 fclean: clean
 	$(RM) $(OBJS) $(NAME)
-	@ echo "...and $(RED)$(NAME)$(RESET)"
 	@ make fclean -C $(LIBFT_PATH)
+	@ echo "...and $(RED)$(NAME)$(RESET)"
 
 re: fclean all
 

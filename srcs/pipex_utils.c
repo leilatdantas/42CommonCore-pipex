@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 22:07:27 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/05 12:12:05 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/09 19:05:48 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,11 @@ char **remove_scape_symbol(char **s)
 	size_t	len;
 	size_t	j;
 	size_t	k;
-	// int		scape_symbol;
 	char	**new_array;
 	
 	remove_spaces(s);
+	if (!s[0])
+		return (NULL);
 	new_array = malloc(sizeof(char *) * (array_size(s) + 1));
 	i = 0;
 	while (i < array_size(s))
@@ -103,7 +104,6 @@ char **remove_scape_symbol(char **s)
 		i++;
 	}
 	new_array[i] = NULL;
-	// ft_free_array(s);
 	return (new_array);
 }
 
@@ -131,8 +131,6 @@ char	**ft_split_mod(const char *s)
 		while (s[wordlen] != '\0' && s[wordlen] != ' '
 			&& s[wordlen] != '\t' && s[wordlen] != '\n')
 		{
-			// if (s[wordlen] == '\\' && s[wordlen + 1] != '\0')
-			// 	wordlen+=2;
 			if (s[wordlen] == '\"' || s[wordlen] == '\'')
 			{
 				k = 1;

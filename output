@@ -1,7 +1,0 @@
-total 48
--rw-r--r--  1 leiladantas  staff  1609 Dec  7 21:42 error_handling.c
--rw-r--r--  1 leiladantas  staff  3054 Dec  8 11:11 ft_execve.c
--rw-r--r--  1 leiladantas  staff  2965 Dec  8 12:13 get_path.c
--rw-r--r--  1 leiladantas  staff  1432 Dec  5 12:14 parsing.c
--rw-r--r--  1 leiladantas  staff  2891 Dec  6 10:00 pipex.c
--rw-r--r--  1 leiladantas  staff  3676 Dec  5 12:14 pipex_utils.c

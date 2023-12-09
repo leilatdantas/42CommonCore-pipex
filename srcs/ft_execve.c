@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/08 11:11:41 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/09 19:46:45 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	setup_input(t_pipex *pipex, char **argv)
 	}
 	else
 	{
+		if (argv[INFILE] == NULL)
+			return ;
 		pipex->fd_infile = access(argv[INFILE], F_OK);
 		if (pipex->fd_infile != -1)
 			pipex->fd_infile = open(argv[INFILE], O_RDONLY, 0444);
@@ -35,19 +37,19 @@ void	child_process(int *fd, t_pipex *pipex, char **envp)
 	close(fd[0]);
 	close(fd[1]);
 	unlink(URANDOM_PATH);
-	if (execve(pipex->path_cmd1, pipex->args_cmd1, envp) == -1)
+	if (pipex->path_cmd1 == NULL)
 	{
-		if (pipex->path_cmd1 == NULL)
-		{
-			if (pipex->args_cmd2[0][0] == '/')
-				custom_error2(pipex->args_cmd1[0],
-					"no such file or directory");
-			else
-				custom_error2(pipex->args_cmd1[0],
-					"command not found");
-		}
+		ft_cleanup(pipex);
+		exit(127);
+	}
+	else if(execve(pipex->path_cmd1, pipex->args_cmd1, envp) == -1)
+	{
+		if (pipex->args_cmd2[0][0] == '/')
+			custom_error2(pipex->args_cmd1[0],
+				"no such file or directory");
 		else
-			perror(pipex->args_cmd1[0]);
+			custom_error2(pipex->args_cmd1[0],
+				"command not found");
 	}
 }
 
@@ -58,6 +60,9 @@ void	parent_process(int *fd, t_pipex *pipex, char **envp, char **argv)
 	if (pipex->fd_outfile == -1)
 	{
 		perror(argv[OUTFILE]);
+		ft_cleanup(pipex);
+		if (open(argv[OUTFILE], O_WRONLY) != 0)
+			exit(2);
 		exit(1);
 	}
 	else
@@ -66,13 +71,17 @@ void	parent_process(int *fd, t_pipex *pipex, char **envp, char **argv)
 		dup2(pipex->fd_outfile, STDOUT_FILENO);
 		close(fd[1]);
 		close(fd[0]);
-		if (execve(pipex->path_cmd2, pipex->args_cmd2, envp) == -1)
+		if (!pipex->path_cmd2)
+		{
+			ft_cleanup(pipex);
+			exit(127);
+		}
+		else if (execve(pipex->path_cmd2, pipex->args_cmd2, envp) == -1)
 		{
 			if (access(pipex->path_cmd2, X_OK) == -1)
 			{
 				if (access(pipex->path_cmd2, F_OK) == -1)
 				{
-					// printf("%s\n", pipex->path_cmd2);
 					if (pipex->args_cmd2[0][0] == '/')
 						custom_error(pipex->args_cmd2[0],
 								"No such file or directory", pipex, 127);
@@ -80,7 +89,6 @@ void	parent_process(int *fd, t_pipex *pipex, char **envp, char **argv)
 							"command not found", pipex, 127);
 				}
 				perror(pipex->args_cmd2[0]);
-				// ft_cleanup(pipex);
 				exit(126);
 			}
 		}

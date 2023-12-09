@@ -1,2 +1,0 @@
-CFLAGS 	= -Werror -Wextra -Wall -g #-fsanitize=address
-all: $(NAME)
