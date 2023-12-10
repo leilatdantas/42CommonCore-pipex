@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/10 14:14:27 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/10 14:18:56 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	parent_process(int *fd, t_pipex *pipex, char **envp, char **argv)
 			if (!pipex->args_cmd2[0])
 				custom_error2("", "command not found");
 			else
-				custom_error2(pipex->args_cmd1[0], "command not found");
+				custom_error2(pipex->args_cmd2[0], "command not found");
 			ft_cleanup(pipex);
 			exit(127);
 		}
