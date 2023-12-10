@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:25:10 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/10 11:48:56 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/10 14:39:43 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,26 +71,19 @@ char	*ft_check_command_location(char *command, char *path_i)
 	return (NULL);
 }
 
-char	*get_path(char *command, char **envp)
+char	*find_path(char *path_aux, char *command)
 {
-	int		i;
-	char	*path_aux;
-	char	**path;
-	char	*path_command;
+	char **path;
+	char *path_command;
+	int i;
 
 	i = 0;
-	if (command == NULL)
-		return (NULL);
-	if (access(command, F_OK) == 0 && (command[0] == '.' || command[0] == '/'))
-		return (command);
-	else
-		path_aux = ft_get_path_aux(envp);
 	if (!path_aux)
 		return (NULL);
 	else
 	{
 		path = ft_split_path(path_aux);
-		free(path_aux);
+		// free(path_aux);
 		while (path[i])
 		{
 			path_command = ft_check_command_location(command, path[i]);
@@ -104,4 +97,41 @@ char	*get_path(char *command, char **envp)
 		ft_free_memory(path, path_command);
 	}
 	return (NULL);
+}
+
+char	*get_path(char *command, char **envp)
+{
+	int		i;
+	char	*path_aux;
+	// char	**path;
+	char	*path_command;
+
+	i = 0;
+	if (command == NULL)
+		return (NULL);
+	if (access(command, F_OK) == 0 && (command[0] == '.' || command[0] == '/'))
+		return (command);
+	else
+		path_aux = ft_get_path_aux(envp);
+	path_command = find_path(path_aux, command);
+	// if (!path_aux)
+	// 	return (NULL);
+	// else
+	// {
+	// 	path = ft_split_path(path_aux);
+	// 	free(path_aux);
+	// 	while (path[i])
+	// 	{
+	// 		path_command = ft_check_command_location(command, path[i]);
+	// 		if (path_command != NULL)
+	// 		{
+	// 			ft_free_array(path);
+	// 			return (path_command);
+	// 		}
+	// 		i++;
+	// 	}
+	// 	ft_free_memory(path, path_command);
+	// }
+	free(path_aux);
+	return (path_command);
 }
