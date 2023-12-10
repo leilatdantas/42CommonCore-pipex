@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/10 20:15:44 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/10 21:15:08 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ void	parent_process(int *fd, t_pipex *pipex, char **envp)
 							"command not found", pipex, 127);
 				}
 				perror(pipex->args_cmd2[0]);
+				ft_cleanup(pipex);
 				exit(126);
 			}
 		}
