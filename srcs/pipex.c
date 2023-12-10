@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/09 19:38:04 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/10 13:02:17 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,20 @@ void	check_args(t_pipex *pipex, char **argv, char **envp)
 	else
 	{
 		pipex->args_cmd1 = ft_split_mod(argv[CMD1]);
-		pipex->path_cmd1 = get_path(pipex->args_cmd1[0], envp);
+		if (!pipex->args_cmd1)
+			pipex->path_cmd1 = NULL;
+		else
+			pipex->path_cmd1 = get_path(pipex->args_cmd1[0], envp);
 	}
 	if (argv[CMD2][0] == '\0')
 		pipex->args_cmd2 = NULL;
 	else
 	{
 		pipex->args_cmd2 = ft_split_mod(argv[CMD2]);
-		pipex->path_cmd2 = get_path(pipex->args_cmd2[0], envp);
+		if (!pipex->args_cmd2)
+			pipex->path_cmd2 = NULL;
+		else
+			pipex->path_cmd2 = get_path(pipex->args_cmd2[0], envp);
 	}
 }
 
@@ -90,15 +96,5 @@ int	main(int argc, char **argv, char **envp)
 	// print_args_cmds(pipex);
 	ft_exec(&pipex, envp, argv);
 	ft_cleanup(&pipex);
-    // char *filename = NULL;
-    // char *args[] = {filename, NULL};
-
-    // if (execve(filename, args, NULL) == -1) {
-    //     perror("execve");
-    //     // Se a execução chegar aqui, a chamada execve falhou.
-    //     // Você pode adicionar código adicional para lidar com o erro, se necessário.
-    //     exit(EXIT_FAILURE);
-    // }
-
 	return (0);
 }

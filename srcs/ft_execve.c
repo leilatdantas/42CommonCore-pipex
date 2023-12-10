@@ -6,14 +6,14 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/09 20:11:08 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/10 13:24:57 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 #include <errno.h>
 
-void	setup_input(t_pipex *pipex, char **argv)
+void	setup_infile(t_pipex *pipex, char **argv)
 {
 	if (ft_strncmp(argv[INFILE], "/dev/urandom", 12) == 0)
 	{
@@ -30,6 +30,28 @@ void	setup_input(t_pipex *pipex, char **argv)
 	}
 }
 
+void	ft_execve(char *path_command, char **args_cmd, char **envp)
+{
+	if (execve(path_command, args_cmd, envp) == -1)
+	{
+		if (access(path_command, X_OK) == -1)
+		{
+			if (access(path_command, F_OK) == -1)
+			{
+				if (args_cmd[0][0] == '/')
+				{
+					custom_error2(args_cmd[0],
+							"No such file or directory");
+				}
+				custom_error2(args_cmd[0],
+						"command not found");
+			}
+			perror(args_cmd[0]);
+			exit(126);
+		}
+	}
+}
+
 void	child_process(int *fd, t_pipex *pipex, char **envp)
 {
 	dup2(pipex->fd_infile, STDIN_FILENO);
@@ -37,27 +59,16 @@ void	child_process(int *fd, t_pipex *pipex, char **envp)
 	close(fd[0]);
 	close(fd[1]);
 	unlink(URANDOM_PATH);
-	if (pipex->path_cmd1 == NULL)
-	{
-		ft_cleanup(pipex);
-		ft_putstr_fd("command not found\n", 2);
-		exit(127);
-	}
-	else if(execve(pipex->path_cmd1, pipex->args_cmd1, envp) == -1)
-	{
-		if (pipex->args_cmd2[0][0] == '/')
-			custom_error2(pipex->args_cmd1[0],
-				"no such file or directory");
-		else
-			custom_error2(pipex->args_cmd1[0],
-				"command not found");
-	}
+	if (!pipex->path_cmd1)
+		custom_error("", "command not found", pipex, 127);
+	else
+		ft_execve(pipex->path_cmd1, pipex->args_cmd1, envp);
 }
 
 void	parent_process(int *fd, t_pipex *pipex, char **envp, char **argv)
 {
 	pipex->fd_outfile = open(argv[OUTFILE],
-			O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (pipex->fd_outfile == -1)
 	{
 		perror(argv[OUTFILE]);
@@ -73,27 +84,9 @@ void	parent_process(int *fd, t_pipex *pipex, char **envp, char **argv)
 		close(fd[1]);
 		close(fd[0]);
 		if (!pipex->path_cmd2)
-		{
-			ft_cleanup(pipex);
-			ft_putstr_fd("command not found", 2);
-			exit(127);
-		}
-		else if (execve(pipex->path_cmd2, pipex->args_cmd2, envp) == -1)
-		{
-			if (access(pipex->path_cmd2, X_OK) == -1)
-			{
-				if (access(pipex->path_cmd2, F_OK) == -1)
-				{
-					if (pipex->args_cmd2[0][0] == '/')
-						custom_error(pipex->args_cmd2[0],
-								"No such file or directory", pipex, 127);
-					custom_error(pipex->args_cmd2[0],
-							"command not found", pipex, 127);
-				}
-				perror(pipex->args_cmd2[0]);
-				exit(126);
-			}
-		}
+			custom_error("", "command not found", pipex, 127);
+		else
+			ft_execve(pipex->path_cmd2, pipex->args_cmd2, envp);
 	}
 }
 
@@ -109,7 +102,7 @@ void	ft_exec(t_pipex *pipex, char **envp, char **argv)
 		perror("fork");
 	if (process == 0)
 	{
-		setup_input(pipex, argv);
+		setup_infile(pipex, argv);
 		if (pipex->fd_infile == -1)
 			perror(argv[INFILE]);
 		else

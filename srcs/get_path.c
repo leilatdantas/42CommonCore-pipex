@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:25:10 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/09 18:40:56 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/10 11:48:56 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*get_path(char *command, char **envp)
 	char	*path_command;
 
 	i = 0;
-	if (!command)
+	if (command == NULL)
 		return (NULL);
 	if (access(command, F_OK) == 0 && (command[0] == '.' || command[0] == '/'))
 		return (command);
