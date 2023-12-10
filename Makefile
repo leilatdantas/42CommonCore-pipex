@@ -6,7 +6,7 @@
 #    By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/30 09:21:39 by lebarbos          #+#    #+#              #
-#    Updated: 2023/12/10 17:49:16 by lebarbos         ###   ########.fr        #
+#    Updated: 2023/12/10 23:19:09 by lebarbos         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ CC	= cc
 RM	= rm -rf
 
 #FLAGS
-CFLAGS 	= -Werror -Wextra -Wall -g #-fsanitize=address
+CFLAGS 	= -Werror -Wextra -Wall -g -fsanitize=address
 LFLAGS	= -L ./libft -lft
 
 #PATH
