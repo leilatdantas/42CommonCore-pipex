@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:32:52 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/10 12:42:15 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/10 20:00:47 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,23 @@ void	custom_error2(char *file, char *message)
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(message, 2);
 	ft_putstr_fd("\n", 2);
+}
+
+void	ft_free_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
+
+int	ft_error(char *error_message)
+{
+	ft_putstr_fd(error_message, 2);
+	exit(EXIT_FAILURE);
 }

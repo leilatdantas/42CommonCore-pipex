@@ -6,7 +6,7 @@
 #    By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/30 09:21:39 by lebarbos          #+#    #+#              #
-#    Updated: 2023/12/09 18:38:30 by lebarbos         ###   ########.fr        #
+#    Updated: 2023/12/10 17:49:16 by lebarbos         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ OBJ			= objs
 
 #FILES
 NAME		= pipex
-SRC_FILES	= pipex.c pipex_utils.c get_path.c error_handling.c parsing.c ft_execve.c handle_urandom.c
+SRC_FILES	= pipex.c pipex_utils.c get_path.c error_handling.c parsing.c ft_execve.c handle_urandom.c ft_split_mod.c
 OBJ_FILES	= $(SRC_FILES:%.c=%.o)
 TARGET		= $(addprefix $(OBJ)/, $(OBJ_FILES))
 

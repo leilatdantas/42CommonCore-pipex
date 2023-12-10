@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 18:23:13 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/03 20:42:02 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/10 20:17:25 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct s_pipex
 	char	**args_cmd2;
 }	t_pipex;
 
-char	**ft_split_mod(const char *s);
+char	**ft_split_mod(char *s);
 char	*get_path(char *command, char **envp);
 void	ft_free_array(char **path);
 void	custom_error(char *file, char *message, t_pipex *pipex, int error);
@@ -61,5 +61,10 @@ void	ft_cleanup(t_pipex *pipex);
 void	remove_spaces(char **array);
 void	ft_exec(t_pipex *pipex, char **envp, char **argv);
 void	handle_urandom(void);
+void	ft_free_memory(char **path, char *path_command);
+int		ft_error(char *error_message);
+char	*ft_strndup(const char *s, size_t len);
+int		ft_countword(const char *input);
+char	 **remove_scape_symbol(char **s);
 
 #endif 

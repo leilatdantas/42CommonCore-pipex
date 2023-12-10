@@ -6,30 +6,11 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/10 13:02:17 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/10 20:19:18 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-int	ft_error(char *error_message)
-{
-	ft_putstr_fd(error_message, 2);
-	exit(EXIT_FAILURE);
-}
-
-void	ft_free_array(char **array)
-{
-	int	i;
-
-	i = 0;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-}
 
 void	check_args(t_pipex *pipex, char **argv, char **envp)
 {
@@ -93,7 +74,6 @@ int	main(int argc, char **argv, char **envp)
 		ft_error("Usage: ./pipex file1 cmd1 cmd2 file2\n");
 	init_pipex(&pipex);
 	check_args(&pipex, argv, envp);
-	// print_args_cmds(pipex);
 	ft_exec(&pipex, envp, argv);
 	ft_cleanup(&pipex);
 	return (0);
