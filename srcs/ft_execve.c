@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/10 13:24:57 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/10 13:37:11 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,21 @@ void	ft_execve(char *path_command, char **args_cmd, char **envp)
 
 void	child_process(int *fd, t_pipex *pipex, char **envp)
 {
-	dup2(pipex->fd_infile, STDIN_FILENO);
-	dup2(fd[1], STDOUT_FILENO);
-	close(fd[0]);
-	close(fd[1]);
-	unlink(URANDOM_PATH);
-	if (!pipex->path_cmd1)
-		custom_error("", "command not found", pipex, 127);
+	setup_infile(pipex, argv);
+	if (pipex->fd_infile == -1)
+		perror(argv[INFILE]);
 	else
-		ft_execve(pipex->path_cmd1, pipex->args_cmd1, envp);
+	{
+		dup2(pipex->fd_infile, STDIN_FILENO);
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[0]);
+		close(fd[1]);
+		unlink(URANDOM_PATH);
+		if (!pipex->path_cmd1)
+			custom_error("", "command not found", pipex, 127);
+		else
+			ft_execve(pipex->path_cmd1, pipex->args_cmd1, envp);
+	}
 }
 
 void	parent_process(int *fd, t_pipex *pipex, char **envp, char **argv)
@@ -102,11 +108,7 @@ void	ft_exec(t_pipex *pipex, char **envp, char **argv)
 		perror("fork");
 	if (process == 0)
 	{
-		setup_infile(pipex, argv);
-		if (pipex->fd_infile == -1)
-			perror(argv[INFILE]);
-		else
-			child_process(fd, pipex, envp);
+		child_process(fd, pipex, envp);
 	}
 	else
 	{
