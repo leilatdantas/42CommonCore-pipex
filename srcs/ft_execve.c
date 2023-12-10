@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/10 16:29:20 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/10 16:34:51 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,7 @@ void	child_process(int *fd, t_pipex *pipex, char **envp)
 
 void	setup_outfile(t_pipex *pipex, char **argv)
 {
-	pipex->fd_outfile = open(argv[OUTFILE],
-			O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	pipex->fd_outfile = open(argv[OUTFILE], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (pipex->fd_outfile == -1)
 	{
 		perror(argv[OUTFILE]);
