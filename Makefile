@@ -6,7 +6,7 @@
 #    By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/30 09:21:39 by lebarbos          #+#    #+#              #
-#    Updated: 2023/12/11 20:56:04 by lebarbos         ###   ########.fr        #
+#    Updated: 2023/12/12 16:33:44 by lebarbos         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ CC	= cc
 RM	= rm -rf
 
 #FLAGS
-CFLAGS 	= -Werror -Wextra -Wall -g #-fsanitize=address
+CFLAGS 	= -Werror -Wextra -Wall -g -fsanitize=address
 LFLAGS	= -L ./libft -lft
 
 #PATH
@@ -52,20 +52,20 @@ $(NAME): $(OBJ) $(TARGET) $(HEADERS)
 	$(CC) $(CFLAGS) $(TARGET) $(LFLAGS) -o $(NAME)
 
 $(OBJ)/%.o : $(SRCS)/%.c
-	@ $(CC) $(CFLAGS) -c $< -o $@ -I $(INC)
+	$(CC) $(CFLAGS) -c $< -o $@ -I $(INC)
 
 $(OBJ):
-	@ mkdir -p $(OBJ)
+	mkdir -p $(OBJ)
 
 clean:
 	@ echo "Removing $(RED)objs$(RESET)..."
 	$(RM) $(OBJ)
-	@ make clean -C $(LIBFT_PATH)
+	make clean -C $(LIBFT_PATH)
 	
 
 fclean: clean
 	$(RM) $(OBJS) $(NAME)
-	@ make fclean -C $(LIBFT_PATH)
+	make fclean -C $(LIBFT_PATH)
 	@ echo "...and $(RED)$(NAME)$(RESET)"
 
 re: fclean all

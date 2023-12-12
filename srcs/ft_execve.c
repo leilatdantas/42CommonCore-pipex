@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/11 22:05:04 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/12 16:33:08 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,10 @@ void	ft_execve(char *cmd, char **args, t_pipex *pipex, char **envp)
 	if (!cmd)
 	{
 		// perror(args[0]);
-		ft_putstr_fd(args[0], 2);
-		ft_cleanup(pipex);
-		exit(127);
+		// ft_putstr_fd(args[0], 2);
+		// ft_cleanup(pipex);
+		// exit(127);
+		custom_error(args[0], "command not found", pipex, 127);
 	}
 	if (execve(cmd, args, envp) == -1)
 	{
@@ -168,7 +169,7 @@ void	ft_exec(t_pipex *pipex, char **envp, char **argv)
 	{
 		waitpid(process, NULL, WNOHANG);
 		setup_outfile(pipex, argv);
-		if (!pipex->path_cmd2)
+		if (pipex->path_cmd1 == NULL && !ft_strnstr(pipex->args_cmd1[0], ".sh", ft_strlen(pipex->args_cmd1[0])))
 		{
 			pipex->path_cmd2 = ft_strdup(pipex->args_cmd2[0]);
 			// ft_cleanup(pipex);
@@ -178,3 +179,4 @@ void	ft_exec(t_pipex *pipex, char **envp, char **argv)
 		parent_process(fd, pipex, envp);
 	}
 }
+
