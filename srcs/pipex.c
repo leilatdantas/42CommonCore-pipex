@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/12 16:33:53 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/12 16:35:12 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,7 @@ int	main(int argc, char **argv, char **envp)
 	ft_cleanup(&pipex);
 	return (0);
 }
+
+
+
 
