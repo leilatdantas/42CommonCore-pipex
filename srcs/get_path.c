@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:25:10 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/11 21:56:36 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/14 20:46:22 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,14 @@ char	*ft_check_command_location(char *command, char *path_i)
 	char	*path_aux;
 	char	*path_command;
 
+	path_command = NULL;
 	path_aux = ft_strjoin(path_i, "/");
 	path_command = ft_strjoin(path_aux, command);
 	free(path_aux);
 	if (command[0] == '/' || (ft_strncmp(command, "./", 2) == 0))
 	{
-		if (ft_strnstr(command, ".sh", ft_strlen(command)))
-			path_command = ft_strdup(command);
+		// if (ft_strnstr(command, ".sh", ft_strlen(command)))
+		// 	path_command = ft_strdup(command);
 		path_command = ft_strdup(command);
 	}
 	else if (ft_strnstr(command, ".sh", ft_strlen(command))
@@ -95,7 +96,7 @@ char	*get_path(char *command, char **envp)
 	path_command = NULL;
 	if (command == NULL)
 		return (NULL);
-	if (access(command, F_OK) == 0 && (command[0] == '.' || command[0] == '/'))
+	if ((command[0] == '.' || command[0] == '/'))
 		return (ft_strdup(command));
 	else
 		path_aux = ft_get_path_aux(envp);
