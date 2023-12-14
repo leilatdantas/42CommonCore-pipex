@@ -1,0 +1,10 @@
+include
+libft
+Makefile
+objs
+output.txt
+output.txtm
+out.txt
+pipex
+pipex.dSYM
+srcs

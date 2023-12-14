@@ -5,81 +5,102 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/23 16:46:09 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/14 20:49:17 by lebarbos         ###   ########.fr       */
+/*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
+/*   Updated: 2023/12/14 22:42:06 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	check_args(t_pipex *pipex, char **argv, char **envp)
+void	ft_execve(char *cmd, char **args, t_pipex *pipex, char **envp)
 {
-	if (argv[CMD1][0] == '\0')
-		pipex->args_cmd1 = NULL;
+	if (execve(cmd, args, envp) == -1)
+	{
+		if (access(cmd, X_OK) == -1)
+		{
+			if (access(cmd, F_OK) == -1)
+			{
+				if (args[0][0] == '/' || is_script(args[0]))
+					custom_error(args[0],
+						"No such file or directory", pipex, 127);
+				custom_error(args[0],
+					"command not found", pipex, 127);
+			}
+			perror(args[0]);
+			ft_cleanup(pipex);
+			exit(126);
+		}
+	}
+}
+
+void	child_process(int *fd, t_pipex *pipex, char **envp)
+{
+	if (pipex->path_cmd1 == NULL)
+	{
+		if (pipex->args_cmd1 != NULL)
+		{
+			if (!ft_strnstr(pipex->args_cmd1[0], ".sh",
+					ft_strlen(pipex->args_cmd1[0])))
+				pipex->path_cmd1 = ft_strdup(pipex->args_cmd1[0]);
+		}
+		else
+		{
+			ft_cleanup(pipex);
+			ft_putstr_fd("command not found\n", 2);
+			exit(127);
+		}
+	}
+	dup2(pipex->fd_infile, STDIN_FILENO);
+	dup2(fd[1], STDOUT_FILENO);
+	close(fd[0]);
+	close(fd[1]);
+	unlink(URANDOM_PATH);
+	ft_execve(pipex->path_cmd1, pipex->args_cmd1, pipex, envp);
+}
+
+void	parent_process(int *fd, t_pipex *pipex, char **envp)
+{
+	if (pipex->path_cmd2 == NULL)
+	{
+		if (pipex->args_cmd2 != NULL)
+		{
+			if (!is_script(pipex->args_cmd2[0]))
+				pipex->path_cmd2 = ft_strdup(pipex->args_cmd2[0]);
+		}
+		else
+		{
+			ft_cleanup(pipex);
+			ft_putstr_fd("command not found\n", 2);
+			exit(127);
+		}
+	}
+	dup2(fd[0], STDIN_FILENO);
+	dup2(pipex->fd_outfile, STDOUT_FILENO);
+	close(fd[1]);
+	close(fd[0]);
+	ft_execve(pipex->path_cmd2, pipex->args_cmd2, pipex, envp);
+}
+
+void	ft_exec(t_pipex *pipex, char **envp, char **argv)
+{
+	int	fd[2];
+	int	process;
+
+	if ((pipe(fd)) == -1)
+		perror("pipe");
+	process = fork();
+	if (process == -1)
+		perror("fork");
+	if (process == 0)
+	{
+		setup_infile(pipex, argv);
+		child_process(fd, pipex, envp);
+	}
 	else
 	{
-		pipex->args_cmd1 = ft_split_mod(argv[CMD1]);
-		if (!pipex->args_cmd1)
-			pipex->path_cmd1 = NULL;
-		else
-			pipex->path_cmd1 = get_path(pipex->args_cmd1[0], envp);
-	}
-	if (argv[CMD2][0] == '\0')
-		pipex->args_cmd2 = NULL;
-	else
-	{
-		pipex->args_cmd2 = ft_split_mod(argv[CMD2]);
-		if (!pipex->args_cmd2)
-			pipex->path_cmd2 = NULL;
-		else
-			pipex->path_cmd2 = get_path(pipex->args_cmd2[0], envp);
+		waitpid(process, NULL, 0);
+		// wait(NULL);
+		setup_outfile(pipex, argv);
+		parent_process(fd, pipex, envp);
 	}
 }
-
-void	init_pipex(t_pipex *pipex)
-{
-	pipex->args_cmd1 = NULL;
-	pipex->args_cmd2 = NULL;
-	pipex->path_cmd1 = NULL;
-	pipex->path_cmd2 = NULL;
-	pipex->fd_infile = -1;
-	pipex->fd_outfile = -1;
-}
-
-void	print_args_cmds(t_pipex pipex)
-{
-	int	i;
-
-	i = 0;
-	while (pipex.args_cmd1[i])
-	{
-		printf("%s\n", pipex.args_cmd1[i]);
-		i++;
-	}
-	i = 0;
-	while (pipex.args_cmd2[i])
-	{
-		printf("%s\n", pipex.args_cmd2[i]);
-		i++;
-	}
-	printf("%s\n", pipex.path_cmd1);
-	printf("%s\n", pipex.path_cmd2);
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_pipex	pipex;
-
-	if (argc < 5)
-		ft_error("Usage: ./pipex file1 cmd1 cmd2 file2\n");
-	init_pipex(&pipex);
-	check_args(&pipex, argv, envp);
-	// print_args_cmds(pipex);
-	ft_exec(&pipex, envp, argv);
-	ft_cleanup(&pipex);
-	return (0);
-}
-
-
-
-

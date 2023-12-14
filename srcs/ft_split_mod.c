@@ -6,18 +6,18 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/10 16:52:23 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/10 20:20:06 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/14 21:26:58 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char *get_string(const char *s)
+char	*get_string(const char *s)
 {
-	int k;
-	int wordlen;
+	int	k;
+	int	wordlen;
+
 	wordlen = 0;
-	
 	while (s[wordlen] != '\0' && s[wordlen] != ' ' && s[wordlen] != '\n')
 	{
 		if (s[wordlen] == '\"' || s[wordlen] == '\'')
@@ -39,8 +39,8 @@ char *get_string(const char *s)
 
 void	clean_words(int words, char **array)
 {
-	int i;
-	int len;
+	int	i;
+	int	len;
 
 	i = 0;
 	while (i < words)

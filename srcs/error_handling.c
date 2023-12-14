@@ -6,11 +6,17 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:32:52 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/10 20:00:47 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/14 21:31:39 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	ft_free_memory(char **path, char *path_command)
+{
+	ft_free_array(path);
+	free(path_command);
+}
 
 void	ft_cleanup(t_pipex *pipex)
 {
@@ -37,14 +43,6 @@ void	custom_error(char *file, char *message, t_pipex *pipex, int error)
 	ft_putstr_fd("\n", 2);
 	ft_cleanup(pipex);
 	exit(error);
-}
-
-void	custom_error2(char *file, char *message)
-{
-	ft_putstr_fd(file, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(message, 2);
-	ft_putstr_fd("\n", 2);
 }
 
 void	ft_free_array(char **array)
