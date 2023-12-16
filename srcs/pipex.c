@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/14 22:42:06 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/16 18:50:24 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,9 @@ void	child_process(int *fd, t_pipex *pipex, char **envp)
 	ft_execve(pipex->path_cmd1, pipex->args_cmd1, pipex, envp);
 }
 
-void	parent_process(int *fd, t_pipex *pipex, char **envp)
+void	parent_process(int *fd, t_pipex *pipex, char **envp, int process)
 {
+	waitpid(process, NULL, WNOHANG);
 	if (pipex->path_cmd2 == NULL)
 	{
 		if (pipex->args_cmd2 != NULL)
@@ -98,9 +99,7 @@ void	ft_exec(t_pipex *pipex, char **envp, char **argv)
 	}
 	else
 	{
-		waitpid(process, NULL, 0);
-		// wait(NULL);
 		setup_outfile(pipex, argv);
-		parent_process(fd, pipex, envp);
+		parent_process(fd, pipex, envp, process);
 	}
 }

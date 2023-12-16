@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 19:43:04 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/14 21:49:57 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/16 18:00:26 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,5 @@ void	remove_spaces(char **array)
 
 char	*is_script(char *cmd)
 {
-	return(ft_strnstr(cmd, ".sh", ft_strlen(cmd)));
+	return (ft_strnstr(cmd, ".sh", ft_strlen(cmd)));
 }

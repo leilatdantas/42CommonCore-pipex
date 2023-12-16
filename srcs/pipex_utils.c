@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 21:21:55 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/14 22:36:20 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/16 18:00:47 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,4 @@ void	setup_infile(t_pipex *pipex, char **argv)
 		ft_cleanup(pipex);
 		exit(1);
 	}
-	
 }

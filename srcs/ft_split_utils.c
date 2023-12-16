@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   ft_split_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/01 22:07:27 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/10 20:10:19 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/16 18:01:13 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	*remove_backslashes(char *s)
 	len = 0;
 	j = 0;
 	k = 0;
-	while (s[j]) 
+	while (s[j])
 	{
 		if (s[j + k] == '\\' && s[j + k + 1] != '\0')
 			k++;
@@ -99,11 +99,11 @@ char	**remove_scape_symbol(char **s)
 	int		i;
 
 	remove_spaces(s);
-	if (!s[0]) 
+	if (!s[0])
 		return (NULL);
 	new_array = malloc(sizeof(char *) * (array_size(s) + 1));
 	i = 0;
-	while (i < (array_size(s))) 
+	while (i < (array_size(s)))
 	{
 		new_array[i] = remove_backslashes(s[i]);
 		i++;
