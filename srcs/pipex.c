@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/16 18:50:24 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/22 10:47:37 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@ void	child_process(int *fd, t_pipex *pipex, char **envp)
 	{
 		if (pipex->args_cmd1 != NULL)
 		{
-			if (!ft_strnstr(pipex->args_cmd1[0], ".sh",
-					ft_strlen(pipex->args_cmd1[0])))
+			if (!is_script(pipex->args_cmd1[0]))
 				pipex->path_cmd1 = ft_strdup(pipex->args_cmd1[0]);
 		}
 		else
