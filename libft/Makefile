@@ -6,7 +6,7 @@
 #    By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/27 13:31:42 by lebarbos          #+#    #+#              #
-#    Updated: 2023/08/16 18:57:20 by lebarbos         ###   ########.fr        #
+#    Updated: 2023/12/22 11:33:22 by lebarbos         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,3 +62,5 @@ re:			fclean all
 rebonus:	fclean bonus
 
 .PHONY:		all clean fclean re
+
+.SILENT:
