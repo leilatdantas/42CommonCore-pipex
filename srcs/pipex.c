@@ -6,7 +6,7 @@
 /*   By: lebarbos <lebarbos@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/03 20:32:06 by lebarbos          #+#    #+#             */
-/*   Updated: 2023/12/22 10:47:37 by lebarbos         ###   ########.fr       */
+/*   Updated: 2023/12/22 10:55:50 by lebarbos         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void	child_process(int *fd, t_pipex *pipex, char **envp)
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[0]);
 	close(fd[1]);
-	unlink(URANDOM_PATH);
 	ft_execve(pipex->path_cmd1, pipex->args_cmd1, pipex, envp);
 }
 
